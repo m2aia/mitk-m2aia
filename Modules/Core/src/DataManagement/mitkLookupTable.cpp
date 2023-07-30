@@ -13,9 +13,7 @@ found in the LICENSE file.
 #include "mitkLookupTable.h"
 #include <itkProcessObject.h>
 
-#include <vtkColorTransferFunction.h>
-#include <vtkPiecewiseFunction.h>
-
+#include <Colortables/Civids.h>
 #include <Colortables/HotIron.h>
 #include <Colortables/Jet.h>
 #include <Colortables/Inferno.h>
@@ -27,6 +25,9 @@ found in the LICENSE file.
 #include <Colortables/PETColor.h>
 #include <Colortables/Turbo.h>
 #include <mitkLookupTableProperty.h>
+
+#include <vtkPiecewiseFunction.h>
+#include <vtkColorTransferFunction.h>
 
 std::vector<std::string> mitk::LookupTable::typenameList = {
   "Grayscale",
@@ -43,8 +44,13 @@ std::vector<std::string> mitk::LookupTable::typenameList = {
   "Multilabel",
   "PET Color",
   "PET 20",
-  "Turbo"
-};
+  "Turbo",
+  "Grayscale Transparent",
+  "Hot Iron Transparent",
+  "Viridis Transparent",
+  "Civids Transparent",
+  "Civids", 
+  };
 
 mitk::LookupTable::LookupTable()
   : m_LookupTable(vtkSmartPointer<vtkLookupTable>::New())
@@ -89,6 +95,9 @@ void mitk::LookupTable::SetType(const mitk::LookupTable::LookupTableType type)
 
   switch (type)
   {
+    case (mitk::LookupTable::GRAYSCALE_TRANSPARENT):
+      this->BuildGrayScaleLookupTable(true);
+      break;
     case (mitk::LookupTable::GRAYSCALE):
       this->BuildGrayScaleLookupTable();
       break;
@@ -97,6 +106,9 @@ void mitk::LookupTable::SetType(const mitk::LookupTable::LookupTableType type)
       break;
     case (mitk::LookupTable::HOT_IRON):
       this->BuildHotIronLookupTable();
+      break;
+    case (mitk::LookupTable::HOT_IRON_TRANSPARENT):
+      this->BuildHotIronLookupTable(true);
       break;
     case (mitk::LookupTable::JET):
       this->BuildJetLookupTable();
@@ -113,6 +125,15 @@ void mitk::LookupTable::SetType(const mitk::LookupTable::LookupTableType type)
 	  case (mitk::LookupTable::VIRIDIS):
 	    this->BuildViridisLookupTable();
 	    break;
+    case (mitk::LookupTable::VIRIDIS_TRANSPARENT):
+      this->BuildViridisLookupTable(true);
+      break;
+    case (mitk::LookupTable::CIVIDS_TRANSPARENT):
+      this->BuildCividsLookupTable(true);
+      break;
+    case (mitk::LookupTable::CIVIDS):
+      this->BuildCividsLookupTable(false);
+      break;
     case (mitk::LookupTable::MAGMA):
       this->BuildMagmaLookupTable();
       break;
@@ -416,7 +437,7 @@ itk::LightObject::Pointer mitk::LookupTable::InternalClone() const
   return result;
 }
 
-void mitk::LookupTable::BuildGrayScaleLookupTable()
+void mitk::LookupTable::BuildGrayScaleLookupTable(bool transparent)
 {
   vtkSmartPointer<vtkLookupTable> lut = vtkSmartPointer<vtkLookupTable>::New();
   lut->SetRampToLinear();
@@ -424,6 +445,11 @@ void mitk::LookupTable::BuildGrayScaleLookupTable()
   lut->SetHueRange(0.0, 0.0);
   lut->SetValueRange(0.0, 1.0);
   lut->Build();
+
+  if (transparent)
+  {
+    lut->SetTableValue(0, 0.0, 0.0, 0.0, 0.0);
+  }
 
   m_LookupTable = lut;
   this->Modified();
@@ -457,13 +483,22 @@ void mitk::LookupTable::BuildInverseGrayScaleLookupTable()
   this->Modified();
 }
 
-void mitk::LookupTable::BuildHotIronLookupTable()
+void mitk::LookupTable::BuildHotIronLookupTable(bool transparent)
 {
   vtkSmartPointer<vtkLookupTable> lut = vtkSmartPointer<vtkLookupTable>::New();
   lut->SetNumberOfTableValues(256);
   lut->Build();
+  int i = 0;
 
-  for (int i = 0; i < 256; i++)
+  if (transparent)
+  {
+    // Lowest intensity is transparent
+    lut->SetTableValue(
+      0, (double)HotIron[0][0] / 255.0, (double)HotIron[0][1] / 255.0, (double)HotIron[0][2] / 255.0, 0.0);
+    i = 1;
+  }
+
+  for (; i < 256; i++)
   {
     lut->SetTableValue(
       i, (double)HotIron[i][0] / 255.0, (double)HotIron[i][1] / 255.0, (double)HotIron[i][2] / 255.0, 1.0);
@@ -633,13 +668,22 @@ void mitk::LookupTable::BuildInfernoLookupTable()
 	this->Modified();
 }
 
-void mitk::LookupTable::BuildViridisLookupTable()
+void mitk::LookupTable::BuildViridisLookupTable(bool transparent)
 {
 	vtkSmartPointer<vtkLookupTable> lut = vtkSmartPointer<vtkLookupTable>::New();
 	lut->SetNumberOfTableValues(256);
 	lut->Build();
 
-	for (int i = 0; i < 256; i++)
+  int i = 0;
+  if (transparent)
+  {
+    // Lowest intensity is transparent
+    lut->SetTableValue(
+      0, (double)Viridis[0][0] / 255.0, (double)Viridis[0][1] / 255.0, (double)Viridis[0][2] / 255.0, 0.0);
+    i = 1;
+  }
+
+  for (; i < 256; i++)
 	{
 		lut->SetTableValue(
 			i, (double)Viridis[i][0] / 255.0, (double)Viridis[i][1] / 255.0, (double)Viridis[i][2] / 255.0, 1.0);
@@ -647,6 +691,31 @@ void mitk::LookupTable::BuildViridisLookupTable()
 
 	m_LookupTable = lut;
 	this->Modified();
+}
+
+void mitk::LookupTable::BuildCividsLookupTable(bool transparent)
+{
+  vtkSmartPointer<vtkLookupTable> lut = vtkSmartPointer<vtkLookupTable>::New();
+  lut->SetNumberOfTableValues(256);
+  lut->Build();
+
+  int i = 0;
+  if (transparent)
+  {
+    // Lowest intensity is transparent
+    lut->SetTableValue(
+      0, (double)Civids[0][0] / 255.0, (double)Civids[0][1] / 255.0, (double)Civids[0][2] / 255.0, 0.0);
+    i = 1;
+  }
+
+  for (; i < 256; i++)
+  {
+    lut->SetTableValue(
+      i, (double)Civids[i][0] / 255.0, (double)Civids[i][1] / 255.0, (double)Civids[i][2] / 255.0, 1.0);
+  }
+
+  m_LookupTable = lut;
+  this->Modified();
 }
 
 void mitk::LookupTable::BuildMagmaLookupTable()
