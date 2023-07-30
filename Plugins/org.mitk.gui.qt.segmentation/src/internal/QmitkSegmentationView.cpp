@@ -1002,16 +1002,17 @@ void QmitkSegmentationView::ValidateSelectionInput()
 
   if (hasReferenceNode)
   {
-    if (nullptr != m_RenderWindowPart && m_RenderWindowPart->HasCoupledRenderWindows() && !referenceNode->IsVisible(nullptr))
-    {
-      warning += tr("The selected reference image is currently not visible!");
-      toolSelectionBoxesEnabled = false;
-    }
+      if(!referenceNode->IsVisible(nullptr))
+      {
+        warning += tr("The selected reference image is currently not visible!");
+        toolSelectionBoxesEnabled = false;
+      }
+    
   }
 
   if (hasWorkingNode)
   {
-    if (nullptr != m_RenderWindowPart && m_RenderWindowPart->HasCoupledRenderWindows() && !workingNode->IsVisible(nullptr))
+    if (!workingNode->IsVisible(nullptr))
     {
       warning += (!warning.isEmpty() ? "<br>" : "") + tr("The selected segmentation is currently not visible!");
       toolSelectionBoxesEnabled = false;
