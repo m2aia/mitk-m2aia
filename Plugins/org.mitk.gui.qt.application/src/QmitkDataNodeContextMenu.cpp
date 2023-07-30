@@ -192,6 +192,17 @@ void QmitkDataNodeContextMenu::InitDefaultActions()
   m_SurfaceRepresentationAction = new QmitkDataNodeSurfaceRepresentationAction(m_Parent, workbenchPartSite);
   m_SurfaceDataNodeDescriptor->AddAction(m_SurfaceRepresentationAction, false);
   m_DescriptorActionList.push_back(std::make_pair(m_SurfaceDataNodeDescriptor, m_SurfaceRepresentationAction));
+
+  // m2: instead of calling specific descriptors, iterate over all and add assigned context menu entries
+  auto descriptorManager = QmitkNodeDescriptorManager::GetInstance();
+  auto descriptor = descriptorManager->GetDescriptor("SpectrumImage");
+  for(auto action : descriptor->GetActions())
+    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+
+  descriptor = descriptorManager->GetDescriptor("IntervalVector");
+  for(auto action : descriptor->GetActions())
+    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+  
 }
 
 void QmitkDataNodeContextMenu::InitExtensionPointActions()
