@@ -847,10 +847,12 @@ void mitk::Image::Initialize(const mitk::PixelType &type,
   dimensions[3] = (tDim > 0) ? tDim : geometry.CountTimeSteps();
   dimensions[4] = 0;
 
+  // TODO: (m2) we should load data as it is. Squeezing away dimensions can be harmful
+  // and only happens in this initializer
   unsigned int dimension = 2;
-  if (dimensions[2] > 1)
+  if (dimensions[2] >= 1) // TODO: (m2) using >= keeps image zDim, if zDim is set to 1 (purposely)
     dimension = 3;
-  if (dimensions[3] > 1)
+  if (dimensions[3] > 1) // TODO: (m2) how to handle tDim?
     dimension = 4;
 
   Initialize(type, dimension, dimensions, channels);
@@ -943,6 +945,7 @@ void mitk::Image::Initialize(vtkImageData *vtkimagedata, int channels, int tDim,
 
   const double *spacinglist = vtkimagedata->GetSpacing();
   Vector3D spacing;
+  // TODO: (m2) provide a global default spacing
   FillVector3D(spacing, spacinglist[0], 1.0, 1.0);
   if (m_Dimension >= 2)
     spacing[1] = spacinglist[1];
