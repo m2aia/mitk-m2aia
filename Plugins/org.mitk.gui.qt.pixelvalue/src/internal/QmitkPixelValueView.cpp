@@ -160,7 +160,7 @@ void QmitkPixelValueView::Update()
 
     std::ostringstream stream;
     stream.imbue(std::locale::classic());
-    stream.precision(2);
+    stream.precision(10);
 
     if (fabs(pixelValue) > 1000000 || fabs(pixelValue) < 0.01)
     {
