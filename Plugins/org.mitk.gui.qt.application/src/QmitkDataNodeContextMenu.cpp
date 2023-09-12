@@ -206,6 +206,10 @@ void QmitkDataNodeContextMenu::InitDefaultActions()
   descriptor = descriptorManager->GetDescriptor("IntervalVector");
   for(auto action : descriptor->GetActions())
     m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+
+  descriptor = descriptorManager->GetDescriptor("MultiComponentImage");
+  for(auto action : descriptor->GetActions())
+    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
   
 }
 
