@@ -195,22 +195,21 @@ void QmitkDataNodeContextMenu::InitDefaultActions()
 
   // m2: instead of calling specific descriptors, iterate over all and add assigned context menu entries
   auto descriptorManager = QmitkNodeDescriptorManager::GetInstance();
-  auto descriptor = descriptorManager->GetDescriptor("SpectrumImage");
-  for(auto action : descriptor->GetActions())
-    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+  if(auto descriptor = descriptorManager->GetDescriptor("SpectrumImage"))
+    for(auto action : descriptor->GetActions())
+      m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
 
-  descriptor = descriptorManager->GetDescriptor("SpectrumImageStack");
-  for(auto action : descriptor->GetActions())
-    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+  if (auto descriptor = descriptorManager->GetDescriptor("SpectrumImageStack"))
+    for (auto action : descriptor->GetActions())
+      m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
 
-  descriptor = descriptorManager->GetDescriptor("IntervalVector");
-  for(auto action : descriptor->GetActions())
-    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+  if (auto descriptor = descriptorManager->GetDescriptor("IntervalVector"))
+    for (auto action : descriptor->GetActions())
+      m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
 
-  descriptor = descriptorManager->GetDescriptor("MultiComponentImage");
-  for(auto action : descriptor->GetActions())
-    m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
-  
+  if (auto descriptor = descriptorManager->GetDescriptor("MultiComponentImage"))
+    for (auto action : descriptor->GetActions())
+      m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
 }
 
 void QmitkDataNodeContextMenu::InitExtensionPointActions()

@@ -865,9 +865,13 @@ void QmitkExtWorkbenchWindowAdvisor::PostWindowCreate()
     }
 
     // Create a separate toolbar for each category
+    const std::vector<QString> viewCategories = {"M2OLIE", "Segmentation"};
 
     for (const auto &category : categoryViewDescriptorMap.uniqueKeys())
     {
+      if (std::find(std::begin(viewCategories), std::end(viewCategories), category) == std::end(viewCategories))
+        continue;
+
       auto viewDescriptorsInCurrentCategory = categoryViewDescriptorMap.values(category);
 
       if (!viewDescriptorsInCurrentCategory.isEmpty())

@@ -5,7 +5,7 @@
     <view id="org.mitk.views.matchpoint.evaluator"
           name="MatchPoint Registration Evaluator"
           class="QmitkMatchPointRegistrationEvaluator"
-          category="Registration"
+          category="M2OLIE"
           icon="resources/evaluator.svg" />
   </extension>
 
