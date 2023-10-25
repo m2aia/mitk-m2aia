@@ -59,7 +59,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Moving image:</string>
+      <string>Registration image:</string>
      </property>
     </widget>
    </item>
@@ -76,7 +76,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Target image:</string>
+      <string>Fixed image:</string>
      </property>
     </widget>
    </item>

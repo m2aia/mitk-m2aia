@@ -17,6 +17,9 @@ found in the LICENSE file.
 // Mitk
 #include <mitkStatusBar.h>
 #include <mitkNodePredicateDataProperty.h>
+#include <mitkNodePredicateProperty.h>
+#include <mitkNodePredicateAnd.h>
+#include <mitkNodePredicateOr.h>
 #include <mitkMAPRegistrationWrapper.h>
 #include "mitkRegVisPropertyTags.h"
 #include "mitkMatchPointPropertyTags.h"
@@ -89,9 +92,10 @@ void QmitkMatchPointRegistrationEvaluator::CreateQtPartControl(QWidget* parent)
   this->m_Controls.movingNodeSelector->SetInvalidInfo("Select moving image.");
   this->m_Controls.movingNodeSelector->SetPopUpTitel("Select moving image.");
   this->m_Controls.movingNodeSelector->SetPopUpHint("Select the moving image for the evaluation. This is the image that will be mapped by the registration.");
-  this->m_Controls.targetNodeSelector->SetInvalidInfo("Select target image.");
-  this->m_Controls.targetNodeSelector->SetPopUpTitel("Select target image.");
-  this->m_Controls.targetNodeSelector->SetPopUpHint("Select the target image for the evaluation.");
+  this->m_Controls.targetNodeSelector->SetInvalidInfo("Select fixed image.");
+  this->m_Controls.targetNodeSelector->SetPopUpTitel("Select fixed image.");
+  this->m_Controls.targetNodeSelector->SetPopUpHint("Select the fixed image for the evaluation.");
+  this->m_Controls.targetNodeSelector->SetAutoSelectNewNodes(true);
   this->m_Controls.checkAutoSelect->setChecked(true);
 
   this->ConfigureNodePredicates();
@@ -127,9 +131,13 @@ void QmitkMatchPointRegistrationEvaluator::RenderWindowPartDeactivated(
 void QmitkMatchPointRegistrationEvaluator::ConfigureNodePredicates()
 {
   this->m_Controls.registrationNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::RegNodePredicate());
-
+  auto sp = mitk::StringProperty::New("fixed_image");
   this->m_Controls.movingNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::ImageNodePredicate());
-  this->m_Controls.targetNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::ImageNodePredicate());
+  this->m_Controls.targetNodeSelector->SetNodePredicate(mitk::NodePredicateAnd::New(
+      mitk::MITKRegistrationHelper::ImageNodePredicate(),
+      mitk::NodePredicateOr::New(mitk::NodePredicateDataProperty::New("name", sp),
+                                  mitk::NodePredicateProperty::New("name", sp))
+    ));
 }
 
 void QmitkMatchPointRegistrationEvaluator::CheckInputs()
