@@ -131,13 +131,8 @@ void QmitkMatchPointRegistrationEvaluator::RenderWindowPartDeactivated(
 void QmitkMatchPointRegistrationEvaluator::ConfigureNodePredicates()
 {
   this->m_Controls.registrationNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::RegNodePredicate());
-  auto sp = mitk::StringProperty::New("fixed_image");
   this->m_Controls.movingNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::ImageNodePredicate());
-  this->m_Controls.targetNodeSelector->SetNodePredicate(mitk::NodePredicateAnd::New(
-      mitk::MITKRegistrationHelper::ImageNodePredicate(),
-      mitk::NodePredicateOr::New(mitk::NodePredicateDataProperty::New("name", sp),
-                                  mitk::NodePredicateProperty::New("name", sp))
-    ));
+  this->m_Controls.targetNodeSelector->SetNodePredicate(mitk::MITKRegistrationHelper::ImageNodePredicate());
 }
 
 void QmitkMatchPointRegistrationEvaluator::CheckInputs()
