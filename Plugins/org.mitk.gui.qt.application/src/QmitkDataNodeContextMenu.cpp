@@ -146,6 +146,10 @@ void QmitkDataNodeContextMenu::InitDefaultActions()
   m_UnknownDataNodeDescriptor->AddAction(m_ShowDetailsAction, true);
   m_DescriptorActionList.push_back(std::make_pair(m_UnknownDataNodeDescriptor, m_ShowDetailsAction));
 
+  m_M2olieSaveAction = new QmitkDataNodeM2olieSaveAction(QIcon(":/org.mitk.gui.qt.datamanager/m2olie.png"), workbenchPartSite->GetWorkbenchWindow());
+  m_UnknownDataNodeDescriptor->AddAction(m_M2olieSaveAction, false);
+  m_DescriptorActionList.push_back(std::make_pair(m_UnknownDataNodeDescriptor, m_M2olieSaveAction));
+
   m_OpacityAction = new QmitkDataNodeOpacityAction(m_Parent, workbenchPartSite);
   m_UnknownDataNodeDescriptor->AddAction(m_OpacityAction, false);
   m_DescriptorActionList.push_back(std::make_pair(m_UnknownDataNodeDescriptor, m_OpacityAction));

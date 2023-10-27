@@ -10,6 +10,7 @@ set(SRC_CPP_FILES
   QmitkDataNodeOpacityAction.cpp
   QmitkDataNodeOpenInAction.cpp
   QmitkDataNodeReinitAction.cpp
+  QmitkDataNodeM2olieSaveAction.cpp
   QmitkDataNodeRemoveAction.cpp
   QmitkDataNodeResetGeometryAction.cpp
   QmitkDataNodeShowDetailsAction.cpp
@@ -39,6 +40,7 @@ set(MOC_H_FILES
   src/QmitkDataNodeColorAction.h
   src/QmitkDataNodeColorMapAction.h
   src/QmitkDataNodeComponentAction.h
+  src/QmitkDataNodeM2olieSaveAction.h
   src/QmitkDataNodeGlobalReinitAction.h
   src/QmitkDataNodeContextMenu.h
   src/QmitkDataNodeHideAllAction.h
