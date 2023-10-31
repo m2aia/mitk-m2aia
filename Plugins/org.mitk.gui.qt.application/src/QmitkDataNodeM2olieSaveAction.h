@@ -17,11 +17,13 @@ found in the LICENSE file.
 
 // qt widgets ext module
 #include <QmitkNumberPropertySlider.h>
-
 #include "QmitkAbstractDataNodeAction.h"
 
 // qt
 #include <QmitkFileSaveAction.h>
+
+// mitk
+#include <mitkDataStorage.h>
 
 class MITK_QT_APP QmitkDataNodeM2olieSaveAction : public QmitkFileSaveAction
 {
@@ -31,6 +33,7 @@ public:
 
   QmitkDataNodeM2olieSaveAction(berry::IWorkbenchWindow::Pointer window);
   QmitkDataNodeM2olieSaveAction(const QIcon& icon, berry::IWorkbenchWindow::Pointer window);
+  void SetDataStorage(mitk::WeakPointer<mitk::DataStorage>& ds){m_DataStorage = ds;}
 
   // QmitkDataNodeM2olieSaveAction(QWidget* parent, berry::IWorkbenchPartSite::Pointer workbenchPartSite);
   // QmitkDataNodeM2olieSaveAction(QWidget* parent, berry::IWorkbenchPartSite* workbenchPartSite);
@@ -47,6 +50,7 @@ protected:
 private:
 
   QmitkNumberPropertySlider* m_ComponentSlider;
+  mitk::WeakPointer<mitk::DataStorage> m_DataStorage;
 
 };
 
