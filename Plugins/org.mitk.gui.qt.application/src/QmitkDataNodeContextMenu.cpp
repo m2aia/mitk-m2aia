@@ -210,6 +210,10 @@ void QmitkDataNodeContextMenu::InitDefaultActions()
   if(auto descriptor = descriptorManager->GetDescriptor("MultiComponentImage"))
     for(auto action : descriptor->GetActions())
       m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
+
+  if(auto descriptor = descriptorManager->GetDescriptor("Image"))
+    for(auto action : descriptor->GetActions())
+      m_DescriptorActionList.push_back(std::make_pair(descriptor, action));
   
 }
 
